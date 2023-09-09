@@ -4,9 +4,12 @@ import Header from './Header'
 import {checkEmailAndPwdValidation}  from '../Utils/Validation';
 import {auth} from "../Utils/firebase";
 import {createUserWithEmailAndPassword , signInWithEmailAndPassword, updateProfile} from "firebase/auth";
+import { useDispatch } from 'react-redux';
+import { addUser } from '../Utils/userSlice';
+import { user_Avtar } from '../Utils/constants';
 
 const Login = () => {
-  const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [isSignInForm,setisSignInForm] = useState(true);
   const [errorMessage,seterrorMessage] = useState(null);
   const email = useRef(null);
@@ -17,11 +20,7 @@ const Login = () => {
   }
 
     const handleSignUpSubmit = () => {
-        console.log(email.current.value);
-        console.log(pwd.current.value);
-        
         const message = checkEmailAndPwdValidation(email.current.value,pwd.current.value);
-        console.log(message);
         seterrorMessage(message);
        // if(message != null) return;
 
@@ -32,9 +31,10 @@ const Login = () => {
               // Signed in 
               const user = userCredential.user;
               updateProfile(user, {
-                displayName: name.current.value, photoURL: "https://avatars.githubusercontent.com/u/77563311?s=400&v=4"
+                displayName: name.current.value, photoURL: user_Avtar
               }).then(() => {
-                navigate("/browse");
+                const {uid, email, displayName,photoURL} = auth.currentUser;
+                dispatch(addUser({uid: uid,email: email, displayName: displayName, photoURL : photoURL}));
                 // Profile updated!
                 // ...
               }).catch((error) => {
@@ -50,7 +50,7 @@ const Login = () => {
               const errorCode = error.code;
               const errorMessage = error.message;
               seterrorMessage(errorCode + "-np" + errorMessage);
-              navigate("/");
+            //  navigate("/");
               // ..
             });
         }
@@ -62,14 +62,14 @@ const Login = () => {
             .then((userCredential) => {
                 // Signed in 
                 const user = userCredential.user;
-                navigate("/browse");
+                
                 // ...
             })
             .catch((error) => {
                 const errorCode = error.code;
                 const errorMessage = error.message;
                 seterrorMessage(errorCode + "-np" + errorMessage);
-                navigate("/");
+               // navigate("/");
              });
 
         }
