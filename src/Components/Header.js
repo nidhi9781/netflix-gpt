@@ -56,12 +56,12 @@ const handleLanguageChange = (e) => {
         });
     }
   return (
-    <div className='absolute w-screen px-8 py-2 pl-16 bg-gradient-to-b from-black z-10 flex justify-between'>
-        <img src = {logourl}
-        alt = "logo"  className='w-44 '/>
+    <div className='fixed w-screen px-8 py-2  bg-gradient-to-b from-black z-10 flex flex-col md:flex-row md:justify-between '>
+        <img className="w-44 mx-auto md:mx-0" src = {logourl}
+        alt = "logo" />
 
 {userS && (
-    <div className='flex py-2 '>
+    <div className='flex  p-2 justify-between'>
 
      {showGPTSearch && <select className='bg-gray-900 text-white p-2 m-4' onChange={handleLanguageChange} >
        { Supported_language.map(langS =>  <option key={langS.identifier} value={langS.identifier}>{langS.name}</option>)}
@@ -69,7 +69,7 @@ const handleLanguageChange = (e) => {
 
     <button onClick={handleGPTSClickToggle} className='bg-purple-800 rounded-lg py-2  px-4 m-4 text-white'>{ showGPTSearch ? "HomePage" : "GPTSearch"}</button>
    
-     <img src = {userS.photoURL} alt = "photo" className='w-12 h-12' />   
+     <img src = {userS.photoURL} alt = "photo" className='hidden md:block w-12 h-12' />   
 
     <button className='text-white font-bold m-2' onClick={handleSignOut}>Sign Out</button>
     </div>
